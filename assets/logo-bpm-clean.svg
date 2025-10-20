@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80" viewBox="0 0 200 80">
+  <defs>
+    <!-- Gradient pour un effet moderne -->
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#333333;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Fond transparent -->
+  <rect width="200" height="80" fill="none"/>
+  
+  <!-- Logo BPM stylisé basé sur l'original -->
+  <g transform="translate(10, 15)">
+    <!-- B -->
+    <path d="M0 0 L0 50 L25 50 Q35 50 35 40 Q35 35 30 32.5 Q35 30 35 25 Q35 15 25 15 L0 15 Z M8 8 L22 8 Q27 8 27 13 Q27 18 22 18 L8 18 Z M8 26 L22 26 Q27 26 27 31 Q27 36 22 36 L8 36 Z" 
+          fill="url(#logoGrad)"/>
+    
+    <!-- P -->
+    <path d="M45 0 L45 50 L53 50 L53 30 L68 30 Q78 30 78 20 Q78 10 68 10 L45 10 Z M53 8 L68 8 Q70 8 70 12 Q70 16 68 16 L53 16 Z" 
+          fill="url(#logoGrad)"/>
+    
+    <!-- M -->
+    <path d="M90 0 L90 50 L98 50 L98 20 L108 35 L118 35 L128 20 L128 50 L136 50 L136 0 L128 0 L113 25 L98 0 Z" 
+          fill="url(#logoGrad)"/>
+  </g>
+  
+  <!-- FORMATIONS en dessous -->
+  <text x="100" y="70" 
+        font-family="-apple-system, BlinkMacSystemFont, system-ui, sans-serif" 
+        font-size="10" 
+        font-weight="400" 
+        letter-spacing="3px"
+        text-anchor="middle"
+        fill="#666666">FORMATIONS</text>
+</svg>

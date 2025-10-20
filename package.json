@@ -1,0 +1,30 @@
+{
+  "name": "bpm-formation-website",
+  "version": "1.0.0",
+  "description": "Site web BPM Formation avec intégration Stripe",
+  "main": "stripe-server.js",
+  "scripts": {
+    "start": "node stripe-server.js",
+    "dev": "nodemon stripe-server.js",
+    "install-deps": "npm install"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.8",
+    "stripe": "^14.15.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "keywords": [
+    "bpm",
+    "formation",
+    "musique",
+    "stripe",
+    "paiement"
+  ],
+  "author": "BPM Formation",
+  "license": "MIT"
+}

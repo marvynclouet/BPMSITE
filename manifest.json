@@ -1,0 +1,105 @@
+{
+    "name": "BPM Formation - École de Production Musicale",
+    "short_name": "BPM Formation",
+    "description": "Formation professionnelle en beatmaking, production musicale et ingénierie du son",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "orientation": "portrait-primary",
+    "scope": "/",
+    "lang": "fr",
+    "categories": ["education", "music", "entertainment"],
+    "icons": [
+        {
+            "src": "assets/icon-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "assets/icon-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "assets/icon-128x128.png",
+            "sizes": "128x128",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "assets/icon-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "assets/icon-152x152.png",
+            "sizes": "152x152",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "assets/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "assets/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "assets/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable any"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "assets/screenshot1.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "platform": "wide",
+            "label": "Page d'accueil de BPM Formation"
+        },
+        {
+            "src": "assets/screenshot2.png",
+            "sizes": "750x1334",
+            "type": "image/png",
+            "platform": "narrow",
+            "label": "Formations BPM sur mobile"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Nos Formations",
+            "short_name": "Formations",
+            "description": "Découvrez nos formations en production musicale",
+            "url": "/#formations",
+            "icons": [
+                {
+                    "src": "assets/shortcut-formations.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Contact",
+            "short_name": "Contact",
+            "description": "Contactez-nous pour plus d'informations",
+            "url": "/#contact",
+            "icons": [
+                {
+                    "src": "assets/shortcut-contact.png",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ]
+}

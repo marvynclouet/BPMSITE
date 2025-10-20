@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Direct BPM Formation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* Test direct du logo */
+        .navbar {
+            background: rgba(255, 255, 255, 0.98);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 90px;
+        }
+        
+        .logo-img {
+            height: 80px;
+            width: auto;
+        }
+        
+        /* Test direct du carousel */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 100%);
+            z-index: 1;
+        }
+        
+        .hero-carousel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+        
+        .hero-slide.active {
+            opacity: 1;
+        }
+        
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+        
+        .status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Test -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="assets/logo-bpm-clean.svg" alt="BPM Formation Logo" class="logo-img">
+            </div>
+            <div>TEST DIRECT</div>
+        </div>
+    </nav>
+
+    <!-- Hero Test -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+            <div class="hero-carousel">
+                <div class="hero-slide active" data-slide="1">
+                    <img src="assets/KBH-4041.jpg" alt="Studio BPM Formation - Console">
+                </div>
+                <div class="hero-slide" data-slide="2">
+                    <img src="assets/KBH-4176.jpg" alt="Studio BPM Formation - Micro">
+                </div>
+            </div>
+        </div>
+        
+        <div class="hero-content">
+            <h1 class="hero-title">TEST BPM FORMATION</h1>
+            <p>Logo taille: 80px | Carousel: 2 images</p>
+        </div>
+    </section>
+
+    <div class="status" id="status">Initialisation...</div>
+
+    <script>
+        // Test carousel simple et direct
+        let currentSlide = 0;
+        let slides = [];
+        
+        function initTest() {
+            slides = document.querySelectorAll('.hero-slide');
+            const status = document.getElementById('status');
+            
+            console.log('=== TEST BPM FORMATION ===');
+            console.log('Slides trouvées:', slides.length);
+            
+            status.innerHTML = `Slides: ${slides.length} | Logo: ${document.querySelector('.logo-img') ? 'OK' : 'MANQUANT'}`;
+            
+            if (slides.length > 1) {
+                // Rotation toutes les 3 secondes pour test rapide
+                setInterval(rotateSlide, 3000);
+                console.log('Carousel démarré - rotation 3s');
+            }
+            
+            // Test chargement des images
+            testImages();
+        }
+        
+        function rotateSlide() {
+            console.log('Rotation de', currentSlide, 'vers', (currentSlide + 1) % slides.length);
+            
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('status').innerHTML += ` | Slide: ${currentSlide + 1}`;
+        }
+        
+        function testImages() {
+            const images = ['assets/KBH-4041.jpg', 'assets/KBH-4176.jpg'];
+            
+            images.forEach((src, index) => {
+                const img = new Image();
+                img.onload = () => console.log(`✅ Image ${index + 1} chargée:`, src);
+                img.onerror = () => console.log(`❌ Erreur image ${index + 1}:`, src);
+                img.src = src;
+            });
+        }
+        
+        // Démarrage immédiat
+        document.addEventListener('DOMContentLoaded', initTest);
+        
+        // Démarrage de secours
+        setTimeout(initTest, 1000);
+    </script>
+</body>
+</html>

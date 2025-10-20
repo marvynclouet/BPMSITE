@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement Réussi | BPM Formation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css?v=2024-new">
+    
+    <style>
+        .success-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .success-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 60px 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            color: #4ade80;
+            margin-bottom: 30px;
+        }
+        
+        .success-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+        
+        .success-message {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .success-details {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .detail-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .detail-value {
+            font-weight: 600;
+        }
+        
+        .success-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-success {
+            background: #4ade80;
+            color: white;
+            border: none;
+        }
+        
+        .btn-success:hover {
+            background: #22c55e;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-card">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <h1 class="success-title">Paiement Réussi !</h1>
+            
+            <p class="success-message">
+                Félicitations ! Votre inscription à BPM Formation a été confirmée. 
+                Vous allez recevoir un email de confirmation avec tous les détails de votre formation.
+            </p>
+            
+            <div class="success-details" id="payment-details">
+                <div class="detail-row">
+                    <span class="detail-label">Formation :</span>
+                    <span class="detail-value" id="formation-name">Chargement...</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Montant :</span>
+                    <span class="detail-value" id="amount-paid">Chargement...</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Email :</span>
+                    <span class="detail-value" id="customer-email">Chargement...</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Date :</span>
+                    <span class="detail-value" id="payment-date"></span>
+                </div>
+            </div>
+            
+            <div class="success-actions">
+                <a href="index.html" class="btn btn-success">
+                    <i class="fas fa-home"></i> Retour à l'accueil
+                </a>
+                <a href="mailto:contact@bpmformation.com" class="btn btn-secondary">
+                    <i class="fas fa-envelope"></i> Nous contacter
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        // Récupérer les détails du paiement
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session_id');
+        const isDemo = urlParams.get('demo') === 'true';
+        const formation = urlParams.get('formation');
+        const price = urlParams.get('price');
+        
+        if (sessionId) {
+            // Mode démo - afficher les détails directement
+            if (isDemo) {
+                document.getElementById('formation-name').textContent = formation || 'Formation BPM';
+                document.getElementById('amount-paid').textContent = price ? price + '€' : '1€';
+                document.getElementById('customer-email').textContent = 'Voir email de confirmation';
+                document.getElementById('payment-date').textContent = new Date().toLocaleDateString('fr-FR');
+                
+                // Ajouter un badge démo
+                const title = document.querySelector('.success-title');
+                title.innerHTML = 'Paiement Réussi ! <span style="font-size: 0.6em; background: #ff6b6b; padding: 5px 10px; border-radius: 20px; margin-left: 10px;">MODE DÉMO</span>';
+            } else {
+                // Mode normal - récupérer les détails de la session
+                fetch(`/payment-status/${sessionId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('formation-name').textContent = data.formation || 'Formation BPM';
+                        document.getElementById('customer-email').textContent = data.customer_email || 'Non spécifié';
+                        document.getElementById('payment-date').textContent = new Date().toLocaleDateString('fr-FR');
+                        
+                        // Calculer le montant depuis le nom de la formation
+                        let amount = '€';
+                        if (data.formation?.includes('Digitale')) amount = '500€';
+                        else if (data.formation?.includes('Intensive')) amount = '899€';
+                        else if (data.formation?.includes('Complète')) amount = '999€';
+                        
+                        document.getElementById('amount-paid').textContent = amount;
+                    })
+                    .catch(error => {
+                        console.error('Erreur récupération détails:', error);
+                        document.getElementById('formation-name').textContent = 'Formation BPM';
+                        document.getElementById('customer-email').textContent = 'Voir email de confirmation';
+                        document.getElementById('amount-paid').textContent = 'Voir reçu Stripe';
+                        document.getElementById('payment-date').textContent = new Date().toLocaleDateString('fr-FR');
+                    });
+            }
+        } else {
+            // Pas de session ID, rediriger vers l'accueil
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

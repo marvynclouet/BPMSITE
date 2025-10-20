@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="#f3f4f6"/>
+  <g fill="#9ca3af">
+    <rect x="175" y="120" width="50" height="40" rx="5"/>
+    <circle cx="200" cy="100" r="15"/>
+    <path d="M160 160 L240 160 L220 200 L180 200 Z"/>
+    <text x="200" y="230" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#6b7280">
+      Image BPM Formation
+    </text>
+    <text x="200" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#9ca3af">
+      En cours de chargement...
+    </text>
+  </g>
+</svg>

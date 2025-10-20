@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug BPM Formation</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-item { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+        .logo-test { height: 80px; background: #f5f5f5; padding: 10px; }
+        .carousel-test { height: 300px; background: #333; position: relative; }
+        .hero-slide { position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 2s; }
+        .hero-slide.active { opacity: 1; }
+        .hero-slide img { width: 100%; height: 100%; object-fit: cover; }
+    </style>
+</head>
+<body>
+    <h1>Debug BPM Formation</h1>
+    
+    <div class="test-item">
+        <h2>Test Logo</h2>
+        <div class="logo-test">
+            <img src="assets/logo-bpm-clean.svg" alt="Logo SVG" style="height: 80px;">
+        </div>
+    </div>
+    
+    <div class="test-item">
+        <h2>Test Images Carousel</h2>
+        <div class="carousel-test">
+            <div class="hero-slide active">
+                <img src="assets/KBH-4041.jpg" alt="Image 1">
+            </div>
+            <div class="hero-slide">
+                <img src="assets/KBH-4176.jpg" alt="Image 2">
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-item">
+        <h2>Files Check</h2>
+        <div id="files-check"></div>
+    </div>
+    
+    <script>
+        // Test carousel
+        function testCarousel() {
+            const slides = document.querySelectorAll('.hero-slide');
+            let current = 0;
+            
+            setInterval(() => {
+                slides[current].classList.remove('active');
+                current = (current + 1) % slides.length;
+                slides[current].classList.add('active');
+                console.log('Switched to slide', current);
+            }, 3000);
+        }
+        
+        // Test files existence
+        function testFiles() {
+            const files = [
+                'assets/logo-bpm-clean.svg',
+                'assets/KBH-4041.jpg',
+                'assets/KBH-4176.jpg',
+                'styles.css',
+                'script.js'
+            ];
+            
+            const checkDiv = document.getElementById('files-check');
+            
+            files.forEach(file => {
+                fetch(file)
+                    .then(response => {
+                        const status = response.ok ? '✅' : '❌';
+                        checkDiv.innerHTML += `<p>${status} ${file} (${response.status})</p>`;
+                    })
+                    .catch(error => {
+                        checkDiv.innerHTML += `<p>❌ ${file} (Error: ${error.message})</p>`;
+                    });
+            });
+        }
+        
+        // Initialize tests
+        document.addEventListener('DOMContentLoaded', () => {
+            testCarousel();
+            testFiles();
+        });
+    </script>
+</body>
+</html>

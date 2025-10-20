@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="40" viewBox="0 0 120 40">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f97316;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Wave/Sound visualization -->
+  <g transform="translate(5, 20)">
+    <path d="M0 0 Q5 -8 10 0 T20 0" stroke="url(#waveGradient)" stroke-width="2" fill="none"/>
+    <path d="M0 5 Q5 -3 10 5 T20 5" stroke="url(#waveGradient)" stroke-width="1.5" fill="none" opacity="0.7"/>
+    <path d="M0 -5 Q5 3 10 -5 T20 -5" stroke="url(#waveGradient)" stroke-width="1.5" fill="none" opacity="0.7"/>
+  </g>
+  
+  <!-- Main text -->
+  <text x="35" y="15" font-family="Space Grotesk, Arial, sans-serif" font-size="14" font-weight="700" fill="url(#logoGradient)">BPM</text>
+  <text x="35" y="30" font-family="Space Grotesk, Arial, sans-serif" font-size="10" font-weight="500" fill="#6b7280">FORMATION</text>
+  
+  <!-- Musical note accent -->
+  <g transform="translate(95, 8)">
+    <circle cx="0" cy="12" r="3" fill="url(#logoGradient)"/>
+    <rect x="3" y="0" width="1.5" height="15" fill="url(#logoGradient)"/>
+    <path d="M4.5 0 Q8 -2 12 0 Q8 2 4.5 4" fill="url(#logoGradient)"/>
+  </g>
+  
+  <!-- Decorative elements -->
+  <circle cx="110" cy="25" r="1.5" fill="#ec4899" opacity="0.6"/>
+  <circle cx="105" cy="30" r="1" fill="#10b981" opacity="0.6"/>
+  <circle cx="115" cy="15" r="1" fill="#f59e0b" opacity="0.6"/>
+</svg>

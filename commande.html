@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commande | BPM Formation</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Stripe -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
+    <style>
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #333333;
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+            --border-radius-xl: 20px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-6: 24px;
+            --space-8: 32px;
+            --transition-base: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            color: var(--gray-900);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .order-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+        
+        .order-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        
+        .order-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .order-content {
+            padding: 60px 0;
+        }
+        
+        .order-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 60px;
+            align-items: start;
+        }
+        
+        .order-form {
+            background: white;
+            padding: 40px;
+            border-radius: var(--border-radius-xl);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .form-section {
+            margin-bottom: 40px;
+        }
+        
+        .form-section h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition-base);
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .order-summary {
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius-xl);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+        
+        .summary-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .formation-selected {
+            background: var(--gray-50);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+        }
+        
+        .formation-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .formation-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .formation-features {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+        
+        .payment-options {
+            margin-bottom: 30px;
+        }
+        
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+        
+        .payment-option:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .payment-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(0,0,0,0.02);
+        }
+        
+        .payment-option input[type="radio"] {
+            margin: 0;
+        }
+        
+        .payment-info {
+            flex: 1;
+        }
+        
+        .payment-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .payment-subtitle {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+        
+        .installment-details {
+            background: var(--gray-50);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition-base);
+            font-size: 16px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 2px solid var(--gray-200);
+        }
+        
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .security-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+        
+        @media (max-width: 768px) {
+            .order-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .order-summary {
+                order: -1;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            padding: 10px 15px;
+            border-radius: 50px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .back-link:hover {
+            background: white;
+            transform: translateX(-5px);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html#pricing" class="back-link">
+        <i class="fas fa-arrow-left"></i> Retour
+    </a>
+
+    <!-- Header -->
+    <section class="order-header">
+        <div class="container">
+            <h1>Finaliser ma commande</h1>
+            <p>Complétez vos informations pour accéder à votre formation BPM</p>
+        </div>
+    </section>
+
+    <!-- Order Content -->
+    <section class="order-content">
+        <div class="container">
+            <div class="order-grid">
+                <!-- Formulaire -->
+                <div class="order-form">
+                    <form id="order-form">
+                        <!-- Informations personnelles -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-user"></i> Informations personnelles</h3>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">Prénom *</label>
+                                    <input type="text" id="firstName" name="firstName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Nom *</label>
+                                    <input type="text" id="lastName" name="lastName" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="phone">Téléphone *</label>
+                                    <input type="tel" id="phone" name="phone" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="age">Âge</label>
+                                    <select id="age" name="age">
+                                        <option value="">Sélectionner</option>
+                                        <option value="16-18">16-18 ans</option>
+                                        <option value="19-25">19-25 ans (-25 ans)</option>
+                                        <option value="26-35">26-35 ans</option>
+                                        <option value="36+">36+ ans</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Adresse -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-map-marker-alt"></i> Adresse</h3>
+                            
+                            <div class="form-group">
+                                <label for="address">Adresse *</label>
+                                <input type="text" id="address" name="address" required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="zipCode">Code postal *</label>
+                                    <input type="text" id="zipCode" name="zipCode" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="city">Ville *</label>
+                                    <input type="text" id="city" name="city" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Informations formation -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-graduation-cap"></i> Votre formation</h3>
+                            
+                            <div class="form-group">
+                                <label for="experience">Niveau d'expérience</label>
+                                <select id="experience" name="experience">
+                                    <option value="debutant">Débutant complet</option>
+                                    <option value="amateur">Amateur (quelques notions)</option>
+                                    <option value="intermediaire">Intermédiaire</option>
+                                    <option value="avance">Avancé</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="objectives">Vos objectifs (optionnel)</label>
+                                <textarea id="objectives" name="objectives" rows="3" placeholder="Décrivez vos objectifs avec cette formation..."></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Récapitulatif -->
+                <div class="order-summary">
+                    <div class="summary-header">
+                        <h3>Récapitulatif</h3>
+                    </div>
+                    
+                    <div class="formation-selected" id="formation-details">
+                        <div class="formation-name" id="formation-name">Formation Digitale</div>
+                        <div class="formation-price" id="formation-price">500€</div>
+                        <div class="formation-features" id="formation-features">
+                            20h de vidéos préenregistrées<br>
+                            Assistance installation plugins<br>
+                            Accès plateforme 12 mois
+                        </div>
+                    </div>
+
+                    <!-- Options de paiement -->
+                    <div class="payment-options">
+                        <h4 style="margin-bottom: 20px; font-weight: 700;">Options de paiement</h4>
+                        
+                        <div class="payment-option selected" data-mode="full">
+                            <input type="radio" name="payment-mode" value="full" checked>
+                            <div class="payment-info">
+                                <div class="payment-title">Paiement intégral</div>
+                                <div class="payment-subtitle">Paiement sécurisé en une fois</div>
+                            </div>
+                            <div style="font-weight: 700; color: var(--success-color);">
+                                <span id="full-price">500€</span>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-option" data-mode="installments">
+                            <input type="radio" name="payment-mode" value="installments">
+                            <div class="payment-info">
+                                <div class="payment-title">Paiement en 3x sans frais</div>
+                                <div class="payment-subtitle">3 mensualités égales</div>
+                            </div>
+                            <div style="font-weight: 700;">
+                                <span id="installment-price">167€</span><small>/mois</small>
+                            </div>
+                        </div>
+                        
+                        <div class="installment-details" id="installment-details" style="display: none;">
+                            <strong>Détail des échéances :</strong><br>
+                            • Aujourd'hui : <span id="first-payment">167€</span><br>
+                            • Dans 30 jours : <span id="second-payment">167€</span><br>
+                            • Dans 60 jours : <span id="third-payment">166€</span>
+                        </div>
+                        
+                        <div class="payment-info-box" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 4px solid #007bff;">
+                            <h5 style="margin: 0 0 8px 0; color: #007bff; font-size: 14px;">
+                                <i class="fas fa-info-circle"></i> Moyens de paiement disponibles
+                            </h5>
+                            <p style="margin: 0; font-size: 13px; color: #666;">
+                                Stripe vous proposera automatiquement : <strong>Carte bancaire</strong>, <strong>Klarna</strong> et plus encore selon votre pays.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Bouton de paiement -->
+                    <button type="submit" form="order-form" class="btn btn-primary" id="submit-order">
+                        <i class="fas fa-lock"></i> Finaliser la commande
+                    </button>
+                    
+                    <!-- Badges sécurité -->
+                    <div class="security-badges">
+                        <div class="security-badge">
+                            <i class="fas fa-shield-alt"></i> Paiement sécurisé
+                        </div>
+                        <div class="security-badge">
+                            <i class="fab fa-cc-stripe"></i> Stripe
+                        </div>
+                        <div class="security-badge">
+                            <i class="fas fa-lock"></i> SSL
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 100
+        });
+
+        // Configuration des formations
+        const formations = {
+            'digitale': {
+                name: 'Formation Digitale',
+                price: 500,
+                features: '20h de vidéos préenregistrées<br>Assistance installation plugins<br>Accès plateforme 12 mois<br>Support technique<br>Certificat de fin de formation'
+            },
+            'intensive': {
+                name: 'Formation Intensive',
+                price: 899,
+                features: 'Formation présentielle 5 jours<br>Studio professionnel<br>Formateur dédié<br>Projets pratiques<br>Suivi post-formation<br>Réduction -25 ans : 799€'
+            },
+            'complete': {
+                name: 'Formation Complète',
+                price: 999,
+                features: 'Formation 1 mois intensif<br>Studio 24h/24 accès<br>Mentorat personnalisé<br>Portfolio professionnel<br>Aide placement emploi<br>Garantie résultats'
+            }
+        };
+
+        // Récupérer la formation sélectionnée
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedFormation = urlParams.get('formation') || 'digitale';
+        const urlPrice = urlParams.get('price');
+        
+        let formation = formations[selectedFormation];
+        
+        // Si on a un prix dans l'URL, l'utiliser (pour les formations test)
+        if (urlPrice && selectedFormation) {
+            formation = {
+                name: selectedFormation,
+                price: parseInt(urlPrice) / 100, // Convertir centimes en euros
+                features: 'Formation test pour vérifier le système de paiement'
+            };
+        }
+
+        if (formation) {
+            document.getElementById('formation-name').textContent = formation.name;
+            document.getElementById('formation-price').textContent = formation.price + '€';
+            document.getElementById('formation-features').innerHTML = formation.features;
+            
+            // Mettre à jour les prix
+            updatePaymentPrices(formation.price);
+        }
+
+        function updatePaymentPrices(price) {
+            // Prix intégral avec réduction 5%
+            const fullPrice = Math.round(price * 0.95);
+            document.getElementById('full-price').textContent = fullPrice + '€';
+            
+            // Prix en 3x
+            const installmentPrice = Math.round(price / 3);
+            const lastInstallment = price - (installmentPrice * 2);
+            
+            document.getElementById('installment-price').textContent = installmentPrice + '€';
+            document.getElementById('first-payment').textContent = installmentPrice + '€';
+            document.getElementById('second-payment').textContent = installmentPrice + '€';
+            document.getElementById('third-payment').textContent = lastInstallment + '€';
+        }
+
+        // Gestion des options de paiement
+        document.querySelectorAll('.payment-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Désélectionner tous
+                document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+                // Sélectionner celui cliqué
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+                
+                // Afficher/masquer les détails des mensualités
+                const installmentDetails = document.getElementById('installment-details');
+                if (this.dataset.mode === 'installments') {
+                    installmentDetails.style.display = 'block';
+                } else {
+                    installmentDetails.style.display = 'none';
+                }
+            });
+        });
+
+        // Initialize Stripe
+        const stripe = Stripe('pk_live_51Rr3AwJNNw6IWp9FXu3tMTyKqO5FKJR96fgLijsjM2PgUdkIQxAhnK8WBb0MWXWColc1r83cBCScOyRftEI7uGXO00VilueW0E'); // REMPLACEZ PAR VOTRE CLÉ PUBLIQUE
+
+        // Gestion du formulaire
+        document.getElementById('order-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitButton = document.getElementById('submit-order');
+            const originalText = submitButton.innerHTML;
+            
+            // Loading state
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Traitement...';
+            submitButton.disabled = true;
+            
+            try {
+                // Récupérer les données du formulaire
+                const formData = new FormData(this);
+                const paymentMode = document.querySelector('input[name="payment-mode"]:checked').value;
+                
+                const orderData = {
+                    formation: formation.name,
+                    price: Math.round(formation.price * 100), // Convertir euros en centimes
+                    paymentMode: paymentMode,
+                    customer: {
+                        firstName: formData.get('firstName'),
+                        lastName: formData.get('lastName'),
+                        email: formData.get('email'),
+                        phone: formData.get('phone'),
+                        age: formData.get('age'),
+                        address: formData.get('address'),
+                        zipCode: formData.get('zipCode'),
+                        city: formData.get('city'),
+                        experience: formData.get('experience'),
+                        objectives: formData.get('objectives')
+                    }
+                };
+                
+                // Créer la session de paiement
+                const response = await fetch('/create-checkout-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                
+                const session = await response.json();
+                
+                if (session.error) {
+                    throw new Error(session.error);
+                }
+                
+                // Rediriger vers Stripe Checkout LIVE
+                const result = await stripe.redirectToCheckout({
+                    sessionId: session.id
+                });
+                
+                if (result.error) {
+                    throw new Error(result.error.message);
+                }
+                
+            } catch (error) {
+                console.error('Erreur commande:', error);
+                alert('Erreur lors de la commande. Veuillez réessayer.');
+                
+                // Restaurer le bouton
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
