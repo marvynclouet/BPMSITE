@@ -479,7 +479,10 @@ Envoyé depuis le site BPM Formation (bpmformation.com)`
     // emailjs.send('service_4v8ttrj', 'template_sv04z4j', templateParams)
     
     // Option 2: Backend Nodemailer (plus fiable)
-    fetch('http://localhost:3000/send-email', {
+    const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? 'http://localhost:3000' 
+        : '';
+    fetch(`${apiUrl}/send-email`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -1211,7 +1214,10 @@ window.redirectToStripe = async function(formation, price) {
         }
         
         // Créer la session Stripe
-        const response = await fetch('http://localhost:3000/create-checkout-session', {
+        const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:3000' 
+            : '';
+        const response = await fetch(`${apiUrl}/create-checkout-session`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

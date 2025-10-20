@@ -1,178 +1,54 @@
-# BPM Formation - Apache Configuration
-# Performance and SEO optimizations
+# BPM Formation - Configuration Apache pour Hostinger
+# Active la réécriture d'URL
+RewriteEngine On
 
-# Enable compression
+# Forcer HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Rediriger les requêtes API vers le serveur Node.js (port 3000)
+RewriteCond %{REQUEST_URI} ^/create-checkout-session [OR]
+RewriteCond %{REQUEST_URI} ^/send-email [OR]
+RewriteCond %{REQUEST_URI} ^/payment-status
+RewriteRule ^(.*)$ http://localhost:3000/$1 [P,L]
+
+# Servir index.html pour les routes non trouvées (SPA behavior)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/create-checkout-session
+RewriteCond %{REQUEST_URI} !^/send-email
+RewriteCond %{REQUEST_URI} !^/payment-status
+RewriteRule ^(.*)$ index.html [L]
+
+# Compression GZIP pour de meilleures performances
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/plain
-    AddOutputFilterByType DEFLATE text/html
-    AddOutputFilterByType DEFLATE text/xml
-    AddOutputFilterByType DEFLATE text/css
-    AddOutputFilterByType DEFLATE text/javascript
-    AddOutputFilterByType DEFLATE application/xml
-    AddOutputFilterByType DEFLATE application/xhtml+xml
-    AddOutputFilterByType DEFLATE application/rss+xml
-    AddOutputFilterByType DEFLATE application/javascript
-    AddOutputFilterByType DEFLATE application/x-javascript
-    AddOutputFilterByType DEFLATE application/json
-    AddOutputFilterByType DEFLATE application/ld+json
-    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
 </IfModule>
 
-# Enable browser caching
+# Cache des fichiers statiques
 <IfModule mod_expires.c>
     ExpiresActive On
-    ExpiresByType text/css "access plus 1 year"
-    ExpiresByType application/javascript "access plus 1 year"
-    ExpiresByType application/x-javascript "access plus 1 year"
-    ExpiresByType text/javascript "access plus 1 year"
-    ExpiresByType image/png "access plus 1 year"
     ExpiresByType image/jpg "access plus 1 year"
     ExpiresByType image/jpeg "access plus 1 year"
     ExpiresByType image/gif "access plus 1 year"
-    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
     ExpiresByType image/webp "access plus 1 year"
-    ExpiresByType font/woff "access plus 1 year"
-    ExpiresByType font/woff2 "access plus 1 year"
-    ExpiresByType application/font-woff "access plus 1 year"
-    ExpiresByType application/font-woff2 "access plus 1 year"
-    ExpiresByType text/html "access plus 1 hour"
-    ExpiresByType application/json "access plus 1 hour"
-    ExpiresByType application/manifest+json "access plus 1 week"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
 </IfModule>
 
-# Cache-Control headers
+# Sécurité supplémentaire
 <IfModule mod_headers.c>
-    # CSS and JS files
-    <FilesMatch "\.(css|js)$">
-        Header set Cache-Control "public, max-age=31536000, immutable"
-    </FilesMatch>
+    # Protection XSS
+    Header set X-XSS-Protection "1; mode=block"
     
-    # Images
-    <FilesMatch "\.(png|jpg|jpeg|gif|svg|webp|ico)$">
-        Header set Cache-Control "public, max-age=31536000"
-    </FilesMatch>
+    # Empêcher le sniffing MIME
+    Header set X-Content-Type-Options "nosniff"
     
-    # Fonts
-    <FilesMatch "\.(woff|woff2|eot|ttf|otf)$">
-        Header set Cache-Control "public, max-age=31536000"
-        Header set Access-Control-Allow-Origin "*"
-    </FilesMatch>
-    
-    # HTML files
-    <FilesMatch "\.(html|htm)$">
-        Header set Cache-Control "public, max-age=3600"
-    </FilesMatch>
-    
-    # Manifest
-    <FilesMatch "manifest\.json$">
-        Header set Cache-Control "public, max-age=604800"
-    </FilesMatch>
-    
-    # Security headers
-    Header always set X-Content-Type-Options nosniff
-    Header always set X-Frame-Options DENY
-    Header always set X-XSS-Protection "1; mode=block"
-    Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    # Clickjacking protection
+    Header set X-Frame-Options "SAMEORIGIN"
     
     # Content Security Policy
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:; media-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"
-</IfModule>
-
-# Remove server signature
-ServerTokens Prod
-
-# Prevent access to sensitive files
-<FilesMatch "\.(env|log|htaccess|htpasswd|ini|config)$">
-    Order Allow,Deny
-    Deny from all
-</FilesMatch>
-
-# Block access to hidden files
-<FilesMatch "^\.">
-    Order Allow,Deny
-    Deny from all
-</FilesMatch>
-
-# URL Rewriting for SEO-friendly URLs
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    
-    # Force HTTPS
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-    
-    # Force www (uncomment if needed)
-    # RewriteCond %{HTTP_HOST} !^www\.
-    # RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-    
-    # Remove trailing slash
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{THE_REQUEST} /+[^\s]*\S+\?\s
-    RewriteRule ^(.*)/$1 [L,R=301]
-    
-    # Remove .html extension
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^([^\.]+)$ $1.html [NC,L]
-    
-    # Redirect .html to clean URLs
-    RewriteCond %{THE_REQUEST} /+[^\s]*\.html[\s?] [NC]
-    RewriteRule ^(.*)\.html$ /$1 [R=301,L]
-    
-    # Handle missing images gracefully
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_URI} \.(jpg|jpeg|png|gif|svg|webp)$ [NC]
-    RewriteRule . /assets/placeholder.svg [L]
-</IfModule>
-
-# MIME types for modern file formats
-<IfModule mod_mime.c>
-    AddType application/javascript .js
-    AddType text/css .css
-    AddType image/svg+xml .svg
-    AddType image/webp .webp
-    AddType application/manifest+json .webmanifest
-    AddType application/font-woff .woff
-    AddType application/font-woff2 .woff2
-    AddType application/vnd.ms-fontobject .eot
-    AddType application/x-font-ttf .ttf
-    AddType application/x-font-opentype .otf
-    AddType application/json .json
-    AddType application/ld+json .jsonld
-</IfModule>
-
-# Error pages
-ErrorDocument 404 /404.html
-ErrorDocument 500 /500.html
-ErrorDocument 403 /403.html
-
-# Prevent hotlinking
-<IfModule mod_rewrite.c>
-    RewriteCond %{HTTP_REFERER} !^$
-    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?bpmformation\.com [NC]
-    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?google\. [NC]
-    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?bing\. [NC]
-    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?facebook\. [NC]
-    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?instagram\. [NC]
-    RewriteRule \.(jpg|jpeg|png|gif|svg|webp)$ /assets/hotlink-blocked.svg [NC,R=403,L]
-</IfModule>
-
-# Enable keep-alive
-<IfModule mod_headers.c>
-    Header set Connection keep-alive
-</IfModule>
-
-# Optimize file concatenation
-<IfModule mod_setenvif.c>
-    SetEnvIf Request_URI \.(gif|jpe?g|png|svg|webp)$ gzip-only-text/html
-</IfModule>
-
-# Preload important resources
-<IfModule mod_headers.c>
-    <FilesMatch "index\.html$">
-        Header add Link "</styles.css>; rel=preload; as=style"
-        Header add Link "</script.js>; rel=preload; as=script"
-        Header add Link "<https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap>; rel=preload; as=style; crossorigin"
-    </FilesMatch>
+    Header set Content-Security-Policy "default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data:;"
 </IfModule>
