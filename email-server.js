@@ -9,12 +9,12 @@ app.use(express.json());
 app.use(express.static('./'));
 
 // Configuration email
-const transporter = nodemailer.createTransporter({
+const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'bpmformation2025@gmail.com', // Votre email d'envoi
-        pass: 'VOTRE_MOT_DE_PASSE_APP_GMAIL' // Mot de passe d'application Gmail
-    }
+        user: 'bpmformation@gmail.com', // Votre email d'envoi
+        pass: process.env.GMAIL_APP_PASSWORD, // Mot de passe d'application
+    },
 });
 
 // Route pour envoyer email
@@ -23,10 +23,10 @@ app.post('/send-email', async (req, res) => {
         const { name, email, phone, formation, message } = req.body;
         
         const mailOptions = {
-            from: 'bpmformation2025@gmail.com',
-            to: 'clouetmarvyn@gmail.com, bpmformation2025@gmail.com',
+            from: `BPM Formation <${process.env.GMAIL_USER}>`,
+            to: 'bpmformation@gmail.com',
             replyTo: email,
-            subject: `Nouvelle demande BPM Formation - ${name}`,
+            subject: `Nouveau message depuis le site - ${name}`,
             html: `
                 <h2>Nouvelle demande de contact</h2>
                 <p><strong>👤 Nom :</strong> ${name}</p>

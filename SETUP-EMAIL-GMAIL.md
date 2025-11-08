@@ -34,7 +34,7 @@ npm start
 ### 2. **Tester le formulaire**
 - Site : `http://localhost:3000`
 - Formulaire de contact → "Envoyer ma demande"
-- Vérifier `clouetmarvyn@gmail.com` ET `bpmformation2025@gmail.com`
+- Vérifier `bpmformation@gmail.com`
 
 ## ✅ **Avantages Nodemailer vs EmailJS**
 

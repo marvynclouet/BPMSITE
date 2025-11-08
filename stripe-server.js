@@ -15,7 +15,7 @@ const app = express();
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.GMAIL_USER || 'bpmformation2025@gmail.com',
+        user: process.env.GMAIL_USER || 'bpmformation@gmail.com',
         pass: process.env.GMAIL_APP_PASSWORD || 'your_gmail_app_password_here'
     }
 });
@@ -215,10 +215,10 @@ app.post('/send-email', async (req, res) => {
         const { name, email, phone, formation, message } = req.body;
         
         const mailOptions = {
-            from: 'bpmformation2025@gmail.com',
-            to: 'clouetmarvyn@gmail.com, bpmformation2025@gmail.com',
+            from: `BPM Formation <${process.env.GMAIL_USER}>`,
+            to: 'bpmformation@gmail.com',
             replyTo: email,
-            subject: `Nouvelle demande BPM Formation - ${name}`,
+            subject: `Nouveau message depuis le site - ${name}`,
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                     <h2 style="color: #333; border-bottom: 2px solid #000;">Nouvelle demande de contact</h2>

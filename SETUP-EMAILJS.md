@@ -11,7 +11,7 @@
 1. Dans le dashboard → **Email Services**
 2. Cliquer **Add New Service**
 3. Choisir **Gmail** (ou votre fournisseur)
-4. Connecter votre compte `clouetmarvyn@gmail.com` ou `bpmformation2025@gmail.com`
+4. Connecter votre compte `bpmformation@gmail.com`
 5. Nommer le service : `service_bpm_formation`
 
 ### 3️⃣ **Créer le Template Email**
@@ -56,8 +56,7 @@ emailjs.init('user_VOTRE_VRAIE_CLÉ');
 ## ✅ **Configuration des Emails de Réception**
 
 ### Emails configurés :
-- ✅ `clouetmarvyn@gmail.com`
-- ✅ `bpmformation2025@gmail.com`
+- ✅ `bpmformation@gmail.com`
 
 ### Informations collectées :
 - ✅ Nom et prénom
@@ -88,7 +87,7 @@ emailjs.init('user_VOTRE_VRAIE_CLÉ');
 1. Aller sur votre site
 2. Remplir le formulaire de contact
 3. Cliquer "Envoyer ma demande"
-4. Vérifier la réception sur vos 2 emails
+4. Vérifier la réception sur votre email `bpmformation@gmail.com`
 
 ## 🔧 **Si Problème**
 
@@ -101,4 +100,4 @@ emailjs.init('user_VOTRE_VRAIE_CLÉ');
 - Documentation : [docs.emailjs.com](https://www.emailjs.com/docs/)
 - Limite gratuite : 200 emails/mois
 
-**🎯 Résultat** : Formulaire de contact 100% fonctionnel vers vos 2 emails !
+**🎯 Résultat** : Formulaire de contact 100% fonctionnel vers votre email !

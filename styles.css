@@ -121,6 +121,8 @@
 html {
     scroll-behavior: smooth;
     font-size: 16px;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 body {
@@ -130,6 +132,8 @@ body {
     color: var(--gray-800);
     background-color: var(--white);
     overflow-x: hidden;
+    max-width: 100vw;
+    position: relative;
 }
 
 /* Selection */
@@ -576,7 +580,7 @@ a:hover {
 }
 
 .hero-title {
-    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-size: clamp(2.1rem, 6vw, 3.6rem);
     font-weight: var(--font-extrabold);
     margin-bottom: var(--space-6);
     line-height: 1.1;
@@ -585,7 +589,7 @@ a:hover {
 }
 
 .hero-subtitle {
-    font-size: var(--text-xl);
+    font-size: clamp(1rem, 3.2vw, 1.25rem);
     font-weight: var(--font-regular);
     margin-bottom: var(--space-8);
     max-width: 600px;

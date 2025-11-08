@@ -50,7 +50,7 @@ Le site peut être déployé sur :
 
 ## 📧 Contact
 
-- Email : clouetmarvyn@gmail.com / bpmformation2025@gmail.com
+- Email : bpmformation@gmail.com
 - Site : [BPM Formation](https://bpmformation.com)
 
 ---
